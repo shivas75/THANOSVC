@@ -4,7 +4,7 @@ import logging
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.tl.types import User
-from userbot import Config, catub
+from userbot import Config, THANOSPRO
 from userbot.core.managers import edit_delete, edit_or_reply
 
 from .helper.stream_helper import Stream
@@ -15,7 +15,7 @@ plugin_category = "extra"
 
 logging.getLogger("pytgcalls").setLevel(logging.ERROR)
 
-OWNER_ID = catub.uid
+OWNER_ID = THANOSPRO.uid
 
 vc_session = Config.VC_SESSION
 
@@ -24,7 +24,7 @@ if vc_session:
         StringSession(vc_session), Config.APP_ID, Config.API_HASH
     )
 else:
-    vc_client = catub
+    vc_client = THANOSPRO
 
 vc_client.__class__.__module__ = "telethon.client.telegramclient"
 vc_player = CatVC(vc_client)
@@ -40,7 +40,7 @@ async def handler(_, update):
 ALLOWED_USERS = set()
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="joinvc ?(\S+)? ?(?:-as)? ?(\S+)?",
     command=("joinvc", plugin_category),
     info={
@@ -83,7 +83,7 @@ async def joinVoicechat(event):
         )
 
     try:
-        vc_chat = await catub.get_entity(chat)
+        vc_chat = await THANOSPRO.get_entity(chat)
     except Exception as e:
         return await edit_delete(event, f'ERROR : \n{e or "UNKNOWN CHAT"}')
 
@@ -102,7 +102,7 @@ async def joinVoicechat(event):
     await edit_delete(event, out)
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="leavevc",
     command=("leavevc", plugin_category),
     info={
@@ -127,7 +127,7 @@ async def leaveVoicechat(event):
         await edit_delete(event, "Not yet joined any VC")
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="playlist",
     command=("playlist", plugin_category),
     info={
@@ -157,7 +157,7 @@ async def get_playlist(event):
         await edit_delete(event, f"**Playlist:**\n\n{cat}\n**Enjoy the show**")
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="vplay ?(-f)? ?([\S ]*)?",
     command=("vplay", plugin_category),
     info={
@@ -201,7 +201,7 @@ async def play_video(event):
         await edit_delete(event, resp, time=30)
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="play ?(-f)? ?([\S ]*)?",
     command=("play", plugin_category),
     info={
@@ -245,7 +245,7 @@ async def play_audio(event):
         await edit_delete(event, resp, time=30)
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="pause",
     command=("pause", plugin_category),
     info={
@@ -266,7 +266,7 @@ async def pause_stream(event):
     await edit_delete(event, res, time=30)
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="resume",
     command=("resume", plugin_category),
     info={
@@ -287,7 +287,7 @@ async def resume_stream(event):
     await edit_delete(event, res, time=30)
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="skip",
     command=("skip", plugin_category),
     info={
@@ -309,7 +309,7 @@ async def skip_stream(event):
 
 
 """
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="a(?:llow)?vc ?([\d ]*)?",
     command=("allowvc", plugin_category),
     info={
@@ -335,7 +335,7 @@ async def allowvc(event):
     return await edit_delete(event, "Added User to Allowed List")
 
 
-@catub.cat_cmd(
+@THANOSPRO.cat_cmd(
     pattern="d(?:isallow)?vc ?([\d ]*)?",
     command=("disallowvc", plugin_category),
     info={
@@ -361,9 +361,9 @@ async def disallowvc(event):
     return await edit_delete(event, "Removed User to Allowed List")
 
 
-@catub.on(
+@THANOSPRO.on(
     events.NewMessage(outgoing=True, pattern=f"{tr}(speak|sp)(h|j)?(?:\s|$)([\s\S]*)")
-)  #only for catub client
+)  #only for THANOSPRO client
 async def speak(event):
     "Speak in vc"
     r = event.pattern_match.group(2)
